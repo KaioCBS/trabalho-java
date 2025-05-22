@@ -29,4 +29,15 @@ public class Desconto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "cotacao_id", nullable = false)
+    private Cotacao cotacao;
+
+    @Column(nullable = false)
+    private float valorDesconto;
+    @Column(nullable = false)
+    private String descricao;
+    @Column(nullable = false)
+    private Date dataAplicacao;
+    
 }
