@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class usuarioDTO {
-    
+
+public class ClienteDTO {
     private Long id;
 
     @NotBlank(message = "o nome é obrigatorio")
@@ -20,4 +20,8 @@ public class usuarioDTO {
 
     @Email(message = "E-mail inválido")
     private String email;
+
+    @NotBlank(message = "o telefone é obrigatorio")
+    private String telefone;
 }
+
