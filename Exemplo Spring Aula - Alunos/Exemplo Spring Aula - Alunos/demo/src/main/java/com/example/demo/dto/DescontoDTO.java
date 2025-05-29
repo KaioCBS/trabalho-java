@@ -10,5 +10,5 @@ public class DescontoDTO {
     private String descricao;
 
     @Size(min= 5, max = 5, message = "Cupon de desconto neceesario") // fazer a validaçao dps 
-    private String cupon;
+    private String cupom;
 }

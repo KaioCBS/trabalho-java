@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 public class AtualizarDescontoDTO {
     private Float valorDesconto;
     private String descricao;
-    // valor total depois do cupon de desconto e a descriçao do desconto
+    // valor total depois do cupom de desconto e a descriçao do desconto
 }
