@@ -6,7 +6,7 @@ import com.example.demo.Entities.Pagamento;
 import com.example.demo.dto.PagamentoDTO;
 
 @Mapper(componentModel = "spring")
-public interface Pagamentomapper {
+public interface PagamentoMapper {
     PagamentoDTO toDto(Pagamento pagamento);
     Pagamento toEntity(PagamentoDTO pagamentoDTO);
     List<PagamentoDTO> toDTOList(List<Pagamento> pagamento);

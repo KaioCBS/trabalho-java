@@ -6,7 +6,7 @@ import com.example.demo.Entities.Desconto;
 import com.example.demo.dto.DescontoDTO;
 
 @Mapper(componentModel = "spring")
-public interface Descontomapper {
+public interface DescontoMapper {
     DescontoDTO toDto(Desconto desconto);
     Desconto toEntity(DescontoDTO descontoDTO);
     List<DescontoDTO> toDTOList(List<Desconto> desconto);
