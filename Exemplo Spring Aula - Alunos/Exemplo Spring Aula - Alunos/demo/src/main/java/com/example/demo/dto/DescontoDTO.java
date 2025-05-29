@@ -1,32 +1,14 @@
 package com.example.demo.dto;
 
-public class DescontoDTO {
+import lombok.Data;
+import jakarta.validation.constraints.Size;
 
+@Data
+public class DescontoDTO {
     private Long cotacaoId;
-    private float valorDesconto;
+    private Float valorDesconto;
     private String descricao;
 
-    public Long getCotacaoId() {
-        return cotacaoId;
-    }
-
-    public void setCotacaoId(Long cotacaoId) {
-        this.cotacaoId = cotacaoId;
-    }
-
-    public float getValorDesconto() {
-        return valorDesconto;
-    }
-
-    public void setValorDesconto(float valorDesconto) {
-        this.valorDesconto = valorDesconto;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+    @Size(min= 5, max = 5, message = "Cupon de desconto neceesario") // fazer a validaçao dps 
+    private String cupon;
 }
