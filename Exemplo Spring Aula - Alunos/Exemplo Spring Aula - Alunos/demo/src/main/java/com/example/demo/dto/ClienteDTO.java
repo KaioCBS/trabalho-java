@@ -16,7 +16,7 @@ public class ClienteDTO {
     private String nome;
 
     @Size(min=11, max=11, message = "o cpf deve conter 11 caracteres")
-    private String cpf;
+    private String documento;
 
     @Email(message = "E-mail inválido")
     private String email;

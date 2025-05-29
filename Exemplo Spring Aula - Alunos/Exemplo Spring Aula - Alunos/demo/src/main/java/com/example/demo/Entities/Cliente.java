@@ -32,5 +32,7 @@ public class Cliente {
     private String email;
     @Column(nullable = false)
     private String telefone;
+    @Column(nullable = false)
+    private String documento;
     
 }
