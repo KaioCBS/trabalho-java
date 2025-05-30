@@ -1,6 +1,6 @@
 package com.example.demo.service.Utils;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,17 +21,17 @@ public class PagamentoService {
     public PagamentoDTO registrar(PagamentoDTO dto) {
         Pagamento pagamento = pagamentoMapper.toEntity(dto);
         pagamento.setDataPagamento(LocalDateTime.now());
-        return pagamentoMapper.toDTO(pagamentoRepositorio.save(pagamento));
+        return pagamentoMapper.toDto(pagamentoRepositorio.save(pagamento));
     }
 
     public Optional<PagamentoDTO> buscarPorId(Long id) {
-        return pagamentoRepositorio.findById(id).map(pagamentoMapper::toDTO);
+        return pagamentoRepositorio.findById(id).map(pagamentoMapper::toDto);
     }
 
     public Optional<PagamentoDTO> atualizarStatus(Long id, String status) {
         return pagamentoRepositorio.findById(id).map(pagamento -> {
             pagamento.setStatus(status);
-            return pagamentoMapper.toDTO(pagamentoRepositorio.save(pagamento));
+            return pagamentoMapper.toDto(pagamentoRepositorio.save(pagamento));
         });
     }
 

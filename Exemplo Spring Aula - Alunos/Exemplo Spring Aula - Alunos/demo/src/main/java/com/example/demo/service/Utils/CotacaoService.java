@@ -1,7 +1,10 @@
 package com.example.demo.service.Utils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.Entities.Cotacao;
@@ -21,24 +24,24 @@ public class CotacaoService {
     public CotacaoDTO criar(CotacaoDTO dto) {
         Cotacao cotacao = cotacaoMapper.toEntity(dto);
         cotacao.setDataCotacao(LocalDateTime.now());
-        return cotacaoMapper.toDTO(cotacaoRepositorio.save(cotacao));
+        return cotacaoMapper.toDto(cotacaoRepositorio.save(cotacao));
     }
 
     public List<CotacaoDTO> listarTodos() {
         return cotacaoRepositorio.findAll()
                 .stream()
-                .map(cotacaoMapper::toDTO)
+                .map(cotacaoMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     public Optional<CotacaoDTO> buscarPorId(Long id) {
-        return cotacaoRepositorio.findById(id).map(cotacaoMapper::toDTO);
+        return cotacaoRepositorio.findById(id).map(cotacaoMapper::toDto);
     }
 
     public Optional<CotacaoDTO> atualizarStatus(Long id, String status) {
         return cotacaoRepositorio.findById(id).map(cotacao -> {
             cotacao.setStatus(status);
-            return cotacaoMapper.toDTO(cotacaoRepositorio.save(cotacao));
+            return cotacaoMapper.toDto(cotacaoRepositorio.save(cotacao));
         });
     }
 

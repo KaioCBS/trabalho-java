@@ -2,6 +2,7 @@ package com.example.demo.service.Utils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.Entities.Cliente;
@@ -20,22 +21,22 @@ public class ClienteService {
     private ClienteMapper clienteMapper;
 
     public Optional<ClienteDTO> buscarPorId(Long id) {
-        return clienteRepositorio.findById(id).map(clienteMapper::toDTO);
+        return clienteRepositorio.findById(id).map(clienteMapper::toDto);
     }
 
     public Optional<ClienteDTO> buscarPorEmail(String email) {
-        return clienteRepositorio.findByEmail(email).map(clienteMapper::toDTO);
+        return clienteRepositorio.findByEmail(email).map(clienteMapper::toDto);
     }
 
     public ClienteDTO criarCliente(ClienteDTO dto) {
         Cliente cliente = clienteMapper.toEntity(dto);
-        return clienteMapper.toDTO(clienteRepositorio.save(cliente));
+        return clienteMapper.toDto(clienteRepositorio.save(cliente));
     }
 
     public List<ClienteDTO> listarTodos() {
         return clienteRepositorio.findAll()
                 .stream()
-                .map(clienteMapper::toDTO)
+                .map(clienteMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +46,7 @@ public class ClienteService {
             cliente.setEmail(dto.getEmail());
             cliente.setTelefone(dto.getTelefone());
             cliente.setDocumento(dto.getDocumento());
-            return clienteMapper.toDTO(clienteRepositorio.save(cliente));
+            return clienteMapper.toDto(clienteRepositorio.save(cliente));
         });
     }
 }

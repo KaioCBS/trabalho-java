@@ -1,6 +1,7 @@
 package com.example.demo.Entities;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,7 +39,7 @@ public class Cotacao {
     private Destino destino;
 
     @Column(nullable = false)
-    private Date dataCotacao;
+    private LocalDateTime dataCotacao;
     @Column(nullable = false)
     private Integer numeroDePessoas;
     @Column(nullable = false)
