@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Desconto", description = "Endpoints para gerenciamento de descontos")
 @RestController
 @RequestMapping("/api/descontos")
 public class DescontoController {

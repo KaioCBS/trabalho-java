@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Cotação", description = "Endpoints para gerenciamento de cotações")
 @RestController
 @RequestMapping("/api/cotacoes")
 public class CotacaoController {

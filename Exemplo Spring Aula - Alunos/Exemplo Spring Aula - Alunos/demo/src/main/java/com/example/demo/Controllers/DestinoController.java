@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Destino", description = "Endpoints para gerenciamento dos destinos")
 @RestController
 @RequestMapping("/api/destinos")
 public class DestinoController {
