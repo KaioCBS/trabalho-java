@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.Entities.Destino;
 import com.example.demo.dto.DestinoDTO;
+import com.example.demo.mapper.DestinoMapper;
 import com.example.demo.service.Utils.ApiResponse;
 import com.example.demo.service.Utils.DestinoService;
 import com.example.demo.service.Utils.ErrorResponse;
@@ -24,10 +25,13 @@ public class DestinoController {
     @Autowired
     private DestinoService destinoService;
 
+    @Autowired
+    private DestinoMapper destinoMapper; 
+
     @PostMapping
     public ResponseEntity<DestinoDTO> criar(@Valid @RequestBody DestinoDTO destinoDTO) {
         DestinoDTO novoDestino = destinoService.criarDestino(destinoDTO);
-        DestinoDTO resposta = destinoMapper.toDTO(novoDestino);
+        DestinoDTO resposta = destinoMapper.toDto(novoDestino);  
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
