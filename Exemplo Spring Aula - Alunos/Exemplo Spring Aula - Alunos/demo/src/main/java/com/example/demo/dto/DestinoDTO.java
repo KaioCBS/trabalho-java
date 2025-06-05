@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,9 @@ import lombok.NoArgsConstructor;
 public class DestinoDTO {
     private Long id;
     private String descricao;
-    private float precoPorPessoa;
+
+    @NotNull(message = "Preço por pessoa é obrigatório")
+    private Double precoPorPessoa;
 
     @NotBlank(message = "o nome é obrigatorio")
     private String nome;

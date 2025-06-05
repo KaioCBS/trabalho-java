@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.demo.Entities.Destino;
 import com.example.demo.dto.DestinoDTO;
 import com.example.demo.service.Utils.ApiResponse;
 import com.example.demo.service.Utils.DestinoService;
@@ -23,9 +25,10 @@ public class DestinoController {
     private DestinoService destinoService;
 
     @PostMapping
-    public ResponseEntity<DestinoDTO> criar(@RequestBody DestinoDTO dto) {
-        DestinoDTO novo = destinoService.criarDestino(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novo);
+    public ResponseEntity<DestinoDTO> criar(@Valid @RequestBody DestinoDTO destinoDTO) {
+        DestinoDTO novoDestino = destinoService.criarDestino(destinoDTO);
+        DestinoDTO resposta = destinoMapper.toDTO(novoDestino);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
     @GetMapping

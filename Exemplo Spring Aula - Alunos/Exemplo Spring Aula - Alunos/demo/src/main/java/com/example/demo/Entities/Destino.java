@@ -33,6 +33,6 @@ public class Destino {
     @Column(nullable = false)
     private String localizacao;
     @Column(nullable = false)
-    private float precoPorPessoa;
+    private Double precoPorPessoa;
 
 }
