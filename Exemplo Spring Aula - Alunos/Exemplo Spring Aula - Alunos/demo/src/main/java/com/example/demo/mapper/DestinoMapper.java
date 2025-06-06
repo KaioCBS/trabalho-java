@@ -8,7 +8,7 @@ import com.example.demo.dto.DestinoDTO;
 @Mapper(componentModel = "spring")
 public interface DestinoMapper {
     DestinoDTO toDto(Destino destino);
-    Destino destino = DestinoMapper.toEntity(destinoDTO);
+    Destino toEntity(DestinoDTO destinoDTO);
     List<DestinoDTO> toDTOList(List<Destino> destino);
 }
 

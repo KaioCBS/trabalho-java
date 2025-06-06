@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 @Data
 public class DescontoDTO {
-    private Long cotacaoId;
+    private CotacaoDTO cotacaoDTO;
     private Float valorDesconto;
     private String descricao;
 
