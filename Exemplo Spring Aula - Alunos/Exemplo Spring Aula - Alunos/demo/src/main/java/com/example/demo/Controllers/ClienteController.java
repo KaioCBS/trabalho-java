@@ -1,18 +1,14 @@
 package com.example.demo.Controllers;
 
-import java.util.List;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import com.example.demo.dto.ClienteDTO;
-import com.example.demo.service.Utils.ApiResponse;
 import com.example.demo.service.Utils.ClienteService;
-import com.example.demo.service.Utils.ErrorResponse;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
 
 @Tag(name = "Cliente", description = "Endpoints para gerenciamento de clientes")
 @RestController
@@ -23,27 +19,32 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> criar(@RequestBody ClienteDTO dto) {
-        ClienteDTO novo = clienteService.criarCliente(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novo);
+    public ResponseEntity<ClienteDTO> criarCliente(@RequestBody @Valid ClienteDTO clienteDTO) {
+        ClienteDTO clienteSalvo = clienteService.salvar(clienteDTO);
+        return ResponseEntity.status(201).body(clienteSalvo);
     }
 
     @GetMapping
-    public ResponseEntity<List<ClienteDTO>> listarTodos() {
-        return ResponseEntity.ok(clienteService.listarTodos());
+    public ResponseEntity<List<ClienteDTO>> listarClientes() {
+        List<ClienteDTO> clientes = clienteService.listarTodos();
+        return ResponseEntity.ok(clientes);
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<ClienteDTO> buscarPorEmail(@PathVariable String email) {
-        return clienteService.buscarPorEmail(email)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long id) {
+        ClienteDTO cliente = clienteService.buscarPorId(id);
+        return ResponseEntity.ok(cliente);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> atualizar(@PathVariable Long id, @RequestBody ClienteDTO dto) {
-        return clienteService.atualizar(id, dto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ClienteDTO> atualizar(@PathVariable Long id, @RequestBody @Valid ClienteDTO clienteDTO) {
+        ClienteDTO clienteAtualizado = clienteService.atualizar(id, clienteDTO);
+        return ResponseEntity.ok(clienteAtualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        clienteService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,53 +1,58 @@
 package com.example.demo.service.Utils;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.example.demo.Entities.Cliente;
 import com.example.demo.dto.ClienteDTO;
+import com.example.demo.Entities.Cliente;
 import com.example.demo.mapper.ClienteMapper;
 import com.example.demo.repository.ClienteRepositorio;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteService {
 
-    @Autowired
-    private ClienteRepositorio clienteRepositorio;
+    private final ClienteRepositorio clienteRepositorio;
+    private final ClienteMapper clienteMapper;
 
-    @Autowired
-    private ClienteMapper clienteMapper;
-
-    public Optional<ClienteDTO> buscarPorId(Long id) {
-        return clienteRepositorio.findById(id).map(clienteMapper::toDto);
-    }
-
-    public Optional<ClienteDTO> buscarPorEmail(String email) {
-        return clienteRepositorio.findByEmail(email).map(clienteMapper::toDto);
-    }
-
-    public ClienteDTO criarCliente(ClienteDTO dto) {
-        Cliente cliente = clienteMapper.toEntity(dto);
-        return clienteMapper.toDto(clienteRepositorio.save(cliente));
+    public ClienteDTO salvar(ClienteDTO clienteDTO) {
+        Cliente cliente = clienteMapper.toEntity(clienteDTO);
+        Cliente clienteSalvo = clienteRepositorio.save(cliente);
+        return clienteMapper.toDto(clienteSalvo);
     }
 
     public List<ClienteDTO> listarTodos() {
-        return clienteRepositorio.findAll()
-                .stream()
-                .map(clienteMapper::toDto)
-                .collect(Collectors.toList());
+        List<Cliente> clientes = clienteRepositorio.findAll();
+        return clienteMapper.toDTOList(clientes);
     }
 
-    public Optional<ClienteDTO> atualizar(Long id, ClienteDTO dto) {
-        return clienteRepositorio.findById(id).map(cliente -> {
-            cliente.setNome(dto.getNome());
-            cliente.setEmail(dto.getEmail());
-            cliente.setTelefone(dto.getTelefone());
-            cliente.setDocumento(dto.getDocumento());
-            return clienteMapper.toDto(clienteRepositorio.save(cliente));
-        });
+    public ClienteDTO buscarPorId(Long id) {
+        Cliente cliente = clienteRepositorio.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + id + " não encontrado"));
+        return clienteMapper.toDto(cliente);
+    }
+
+    public ClienteDTO atualizar(Long id, ClienteDTO clienteDTO) {
+        Cliente clienteExistente = clienteRepositorio.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + id + " não encontrado"));
+
+        // Atualiza os dados do cliente
+        clienteExistente.setNome(clienteDTO.getNome());
+        clienteExistente.setEmail(clienteDTO.getEmail());
+        clienteExistente.setTelefone(clienteDTO.getTelefone());
+        clienteExistente.setDocumento(clienteDTO.getDocumento());
+
+        Cliente clienteAtualizado = clienteRepositorio.save(clienteExistente);
+        return clienteMapper.toDto(clienteAtualizado);
+    }
+
+    public void deletar(Long id) {
+        if (!clienteRepositorio.existsById(id)) {
+            throw new EntityNotFoundException("Cliente com ID " + id + " não encontrado");
+        }
+        clienteRepositorio.deleteById(id);
     }
 }
-
