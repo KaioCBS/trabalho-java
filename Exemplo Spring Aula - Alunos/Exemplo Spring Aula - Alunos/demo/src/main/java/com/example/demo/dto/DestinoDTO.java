@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class DestinoDTO {
-    private Long id;
+    private DestinoDTO destinoDTO;
     private String descricao;
 
     @NotNull(message = "Preço por pessoa é obrigatório")

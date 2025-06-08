@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CotacaoDTO {
-    private ClienteDTO cliente;
+    private ClienteDTO clienteDTO;
     private DestinoDTO destinoDTO;
 
     @NotBlank(message = "a data da viagem é obrigatorio")
