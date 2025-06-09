@@ -17,4 +17,6 @@ public class CotacaoDTO {
     private LocalDate dataRetorno;
     @NotBlank(message = "informe o numero de pessoas (obrigatorio)")
     private int numeroPessoas;
+
+    private String status;
 }

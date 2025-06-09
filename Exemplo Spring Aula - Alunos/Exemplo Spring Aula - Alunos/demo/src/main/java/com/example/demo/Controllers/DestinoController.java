@@ -28,25 +28,25 @@ public class DestinoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DestinoDTO>> listarTodosDes() {
-        List<DestinoDTO> destinos = destinoService.listarTodosDes();
+    public ResponseEntity<List<DestinoDTO>> listarTodos() {
+        List<DestinoDTO> destinos = destinoService.listarTodos();
         return ResponseEntity.ok(destinos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DestinoDTO> buscarDestinoPorId(@PathVariable Long id) {
-        DestinoDTO destino = destinoService.buscarDestinoPorId(id);
+    public ResponseEntity<DestinoDTO> buscarPorId(@PathVariable Long id) {
+        DestinoDTO destino = destinoService.buscarPorId(id);
         return ResponseEntity.ok(destino);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DestinoDTO> atualizarDestino(@PathVariable Long id, @RequestBody @Valid DestinoDTO destinoDTO) {
-        DestinoDTO destinoAtualizado = destinoService.atualizarDestino(id, destinoDTO);
+    public ResponseEntity<DestinoDTO> atualizar(@PathVariable Long id, @RequestBody @Valid DestinoDTO destinoDTO) {
+        DestinoDTO destinoAtualizado = destinoService.atualizar(id, destinoDTO);
         return ResponseEntity.ok(destinoAtualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarDestino(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         destinoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
