@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 public class ClienteDTO {
 
+    private long id;
+
     @NotBlank(message = "o nome é obrigatorio")
     private String nome;
 

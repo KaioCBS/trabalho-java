@@ -1,4 +1,5 @@
 package com.example.demo.Controllers;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -9,13 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.CotacaoDTO;
-import com.example.demo.service.Utils.ApiResponse;
 import com.example.demo.service.Utils.CotacaoService;
-import com.example.demo.service.Utils.ErrorResponse;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @Tag(name = "Cotação", description = "Endpoints para gerenciamento de cotações")
@@ -26,10 +23,18 @@ public class CotacaoController {
     @Autowired
     private CotacaoService cotacaoService;
 
-   @PostMapping
-    public ResponseEntity<CotacaoDTO> criarCotacao(@RequestBody @Valid CotacaoDTO cotacaoDTO) {
-        CotacaoDTO novaCotacao = cotacaoService.criarCotacao(cotacaoDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novaCotacao);
+    @PostMapping
+    public ResponseEntity<?> criar(@RequestBody @Valid CotacaoDTO dto) {
+        try {
+            CotacaoDTO nova = cotacaoService.criar(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nova);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace(); // Adicione esta linha para imprimir a stack trace
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erro interno do servidor"));
+        }
     }
 
     @GetMapping
@@ -38,36 +43,21 @@ public class CotacaoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CotacaoDTO> buscarCotacaoPorId(@PathVariable Long id) {
-        CotacaoDTO cotacao = cotacaoService.buscarCotacaoPorId(id);
-        return ResponseEntity.ok(cotacao);
+    public ResponseEntity<CotacaoDTO> buscarPorId(@PathVariable Long id) {
+        Optional<CotacaoDTO> cotacao = cotacaoService.buscarPorId(id);
+        return cotacao.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<CotacaoDTO> atualizarStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
         String status = body.get("status");
-        return cotacaoService.atualizarStatus(id, status)
-                .map(ResponseEntity::ok)
+        return cotacaoService.atualizarStatus(id, status).map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-     @ControllerAdvice
-    public static class GlobalExceptionHandler {
-        @ExceptionHandler(EntityNotFoundException.class)
-        public ResponseEntity<String> handleEntityNotFound(EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
         cotacaoService.remover(id);
         return ResponseEntity.noContent().build();
     }
-
-     @ExceptionHandler(Exception.class)
-        public ResponseEntity<String> handleGeneralException(Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor: " + ex.getMessage());
-        }
-    }
 }
-

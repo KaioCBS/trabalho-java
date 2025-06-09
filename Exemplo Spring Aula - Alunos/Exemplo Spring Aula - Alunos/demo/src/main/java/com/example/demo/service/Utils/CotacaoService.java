@@ -7,12 +7,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.example.demo.Entities.Cotacao;
 import com.example.demo.dto.CotacaoDTO;
 import com.example.demo.mapper.CotacaoMapper;
 import com.example.demo.repository.CotacaoRepositorio;
-
-import jakarta.persistence.EntityNotFoundException;
+import com.example.demo.repository.ClienteRepositorio;
+import com.example.demo.repository.DestinoRepositorio;
 
 @Service
 public class CotacaoService {
@@ -23,23 +24,39 @@ public class CotacaoService {
     @Autowired
     private CotacaoMapper cotacaoMapper;
 
-    public CotacaoDTO criarCotacao(CotacaoDTO cotacaoDTO) {
-        Cotacao cotacao = cotacaoMapper.toEntity(cotacaoDTO);
-        Cotacao novaCotacao = cotacaoRepositorio.save(cotacao);
-        return cotacaoMapper.toDto(novaCotacao);
+    @Autowired
+    private ClienteRepositorio clienteRepositorio;
+
+    @Autowired
+    private DestinoRepositorio destinoRepositorio;
+
+    public CotacaoDTO criar(CotacaoDTO dto) {
+        Cotacao cotacao = cotacaoMapper.toEntity(dto);
+        // Verifique se o cliente e destino estão sendo buscados corretamente
+        cotacao.setCliente(clienteRepositorio.findById(dto.getClienteDTO().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado")));
+        cotacao.setDestino(destinoRepositorio.findById(dto.getDestinoDTO().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Destino não encontrado")));
+        // Definir as datas e outros campos obrigatórios
+        cotacao.setDataCotacao(LocalDateTime.now());
+        cotacao.setDataViagem(dto.getDataViagem());
+        cotacao.setDataRetorno(dto.getDataRetorno());
+        cotacao.setNumeroDePessoas(dto.getNumeroPessoas());
+        // Status e valor total podem ser inicializados aqui, ajustar se desejar lógica
+        // diferente
+        cotacao.setStatus("ATIVO");
+        cotacao.setValorTotal(cotacao.getDestino().getPrecoPorPessoa().floatValue() * cotacao.getNumeroDePessoas());
+        Cotacao cotacaoSalva = cotacaoRepositorio.save(cotacao);
+        return cotacaoMapper.toDto(cotacaoSalva);
     }
 
     public List<CotacaoDTO> listarTodos() {
-        return cotacaoRepositorio.findAll()
-                .stream()
-                .map(cotacaoMapper::toDto)
-                .collect(Collectors.toList());
+        List<Cotacao> cotacoes = cotacaoRepositorio.findAll();
+        return cotacaoMapper.toDTOList(cotacoes);
     }
 
-    public CotacaoDTO buscarCotacaoPorId(Long id) {
-        Cotacao cotacao = cotacaoRepositorio.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Cotação com ID " + id + " não encontrada"));
-        return cotacaoMapper.toDto(cotacao);
+    public Optional<CotacaoDTO> buscarPorId(Long id) {
+        return cotacaoRepositorio.findById(id).map(cotacaoMapper::toDto);
     }
 
     public Optional<CotacaoDTO> atualizarStatus(Long id, String status) {
@@ -53,4 +70,3 @@ public class CotacaoService {
         cotacaoRepositorio.deleteById(id);
     }
 }
-

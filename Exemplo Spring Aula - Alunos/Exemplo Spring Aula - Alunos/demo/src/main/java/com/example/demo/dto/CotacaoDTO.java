@@ -1,31 +1,20 @@
 package com.example.demo.dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @NoArgsConstructor
 @Data
 public class CotacaoDTO {
+    @NotNull(message = "Cliente é obrigatório")
     private ClienteDTO clienteDTO;
+    @NotNull(message = "Destino é obrigatório")
     private DestinoDTO destinoDTO;
-
-    @NotBlank(message = "a data da viagem é obrigatorio")
+    @NotNull(message = "A data da viagem é obrigatória")
     private LocalDate dataViagem;
-    @NotBlank(message = "data de retorno é obrigatorio")
+    @NotNull(message = "A data de retorno é obrigatória")
     private LocalDate dataRetorno;
-    @NotBlank(message = "informe o numero de pessoas (obrigatorio)")
-    private int numeroPessoas;
-    
-    @NotNull(message = "Valor é obrigatório")
-    private Double valor;
-
-     @NotNull(message = "Data da cotação é obrigatória")
-    private LocalDateTime dataCotacao;
-
-    private String status;
+    @NotNull(message = "Informe o número de pessoas (obrigatório)")
+    private Integer numeroPessoas;
 }
