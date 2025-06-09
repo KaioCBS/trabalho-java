@@ -32,7 +32,7 @@ public class Destino {
     private String descricao;
     @Column(nullable = false)
     private String localizacao;
-    @Column
-    private Double precoPorPessoa;
+    @Column // Remova 'nullable = false' daqui se ele pode ser nulo ANTES de ser calculado
+private Double precoPorPessoa;
 
 }

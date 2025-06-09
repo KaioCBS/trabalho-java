@@ -1,3 +1,4 @@
+// Arquivo: CotacaoService.java
 package com.example.demo.service.Utils;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Entities.Cotacao;
+import com.example.demo.Entities.Destino;
 import com.example.demo.dto.CotacaoDTO;
 import com.example.demo.mapper.CotacaoMapper;
 import com.example.demo.repository.CotacaoRepositorio;
@@ -32,20 +34,44 @@ public class CotacaoService {
 
     public CotacaoDTO criar(CotacaoDTO dto) {
         Cotacao cotacao = cotacaoMapper.toEntity(dto);
-        // Verifique se os IDs estão sendo passados corretamente
+
         cotacao.setCliente(clienteRepositorio.findById(dto.getClienteDTO().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado")));
-        cotacao.setDestino(destinoRepositorio.findById(dto.getDestinoDTO().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Destino não encontrado")));
-        // Definir as datas e outros campos obrigatórios
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado.")));
+        
+        Destino destino = destinoRepositorio.findById(dto.getDestinoDTO().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Destino não encontrado."));
+        cotacao.setDestino(destino);
+
         cotacao.setDataCotacao(LocalDateTime.now());
         cotacao.setDataViagem(dto.getDataViagem());
         cotacao.setDataRetorno(dto.getDataRetorno());
         cotacao.setNumeroDePessoas(dto.getNumeroPessoas());
-        // Status e valor total podem ser inicializados aqui, ajustar se desejar lógica
-        // diferente
+        
         cotacao.setStatus("ATIVO");
-        cotacao.setValorTotal(cotacao.getDestino().getPrecoPorPessoa().floatValue() * cotacao.getNumeroDePessoas());
+
+        // *************** Verificações e Cálculo do Valor Total (Revisado) *******************
+        // A ordem das verificações é importante: primeiro se o destino foi encontrado,
+        // depois se o precoPorPessoa do destino é válido.
+        if (cotacao.getDestino() == null || cotacao.getDestino().getPrecoPorPessoa() == null) {
+            throw new IllegalArgumentException("O destino ou o preço por pessoa do destino não pode ser nulo para calcular o valor total da cotação.");
+        }
+        
+        if (cotacao.getNumeroDePessoas() == null || cotacao.getNumeroDePessoas() <= 0) {
+            throw new IllegalArgumentException("Número de pessoas deve ser um valor positivo e não pode ser nulo para calcular o valor total da cotação.");
+        }
+
+        // Garanta que o cálculo seja feito com tipos primitivos e depois convertido
+        // para o tipo wrapper Float se necessário, ou use Double por padrão.
+        // Se precoPorPessoa é Double e numeroDePessoas é Integer:
+        double preco = destino.getPrecoPorPessoa().doubleValue(); // Pega o valor primitivo double
+        int numPessoas = cotacao.getNumeroDePessoas().intValue(); // Pega o valor primitivo int
+        
+        // Multiplicação e atribuição explícita para Float
+        cotacao.setValorTotal((Double) (preco * numPessoas)); 
+        // Ou, se a coluna for Double no DB e você quiser mais precisão:
+        // cotacao.setValorTotal(preco * numPessoas); // Se valorTotal na entidade for Double
+        // ************************************************************************************
+        
         Cotacao cotacaoSalva = cotacaoRepositorio.save(cotacao);
         return cotacaoMapper.toDto(cotacaoSalva);
     }

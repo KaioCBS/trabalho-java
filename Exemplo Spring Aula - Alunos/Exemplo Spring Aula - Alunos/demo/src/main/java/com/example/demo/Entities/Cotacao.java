@@ -1,5 +1,5 @@
+// Arquivo: Cotacao.java
 package com.example.demo.Entities;
-
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,7 +51,7 @@ public class Cotacao {
     @Column(nullable = false)
     private String status;
 
-    @Column(name = "valor_total", nullable = true)
-    private Float valorTotal;
+    @Column(name = "valor_total", nullable = false) // Mantenha nullable = false
+    private Double valorTotal; 
 
 }

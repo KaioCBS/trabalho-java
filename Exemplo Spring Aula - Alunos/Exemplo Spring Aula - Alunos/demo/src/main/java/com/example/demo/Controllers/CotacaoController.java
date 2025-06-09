@@ -33,11 +33,11 @@ public class CotacaoController {
             CotacaoDTO nova = cotacaoService.criar(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(nova);
         } catch (IllegalArgumentException e) {
+            // Captura exceções como "Cliente não encontrado" ou "ID do Cliente é obrigatório"
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
-        } catch (Exception e) {
-            e.printStackTrace(); // Para imprimir a stack trace
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Erro interno do servidor"));
+        } catch (Exception e) { // AQUI ESTAVA O ERRO DE SINTAXE: e....
+            // Captura qualquer outra exceção genérica
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Ocorreu um erro interno: " + e.getMessage()));
         }
     }
 
@@ -69,7 +69,7 @@ public class CotacaoController {
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
         Map<String, String> errors = new HashMap<>();
-        for (FieldError error : bindingResult.getFieldErrors()) {
+        for (FieldError error || bindingResult.getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
         return ResponseEntity.badRequest().body(errors);
