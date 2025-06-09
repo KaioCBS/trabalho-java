@@ -15,6 +15,7 @@ import com.example.demo.service.Utils.ErrorResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @Tag(name = "Cotação", description = "Endpoints para gerenciamento de cotações")
@@ -25,10 +26,10 @@ public class CotacaoController {
     @Autowired
     private CotacaoService cotacaoService;
 
-    @PostMapping
-    public ResponseEntity<CotacaoDTO> criar(@RequestBody CotacaoDTO dto) {
-        CotacaoDTO nova = cotacaoService.criar(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nova);
+   @PostMapping
+    public ResponseEntity<CotacaoDTO> criarCotacao(@RequestBody @Valid CotacaoDTO cotacaoDTO) {
+        CotacaoDTO novaCotacao = cotacaoService.criarCotacao(cotacaoDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novaCotacao);
     }
 
     @GetMapping
@@ -37,10 +38,9 @@ public class CotacaoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CotacaoDTO> buscarPorId(@PathVariable Long id) {
-        return cotacaoService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CotacaoDTO> buscarCotacaoPorId(@PathVariable Long id) {
+        CotacaoDTO cotacao = cotacaoService.buscarCotacaoPorId(id);
+        return ResponseEntity.ok(cotacao);
     }
 
     @PatchMapping("/{id}/status")
@@ -51,10 +51,23 @@ public class CotacaoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+     @ControllerAdvice
+    public static class GlobalExceptionHandler {
+        @ExceptionHandler(EntityNotFoundException.class)
+        public ResponseEntity<String> handleEntityNotFound(EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
         cotacaoService.remover(id);
         return ResponseEntity.noContent().build();
+    }
+
+     @ExceptionHandler(Exception.class)
+        public ResponseEntity<String> handleGeneralException(Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor: " + ex.getMessage());
+        }
     }
 }
 
