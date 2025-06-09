@@ -23,12 +23,6 @@ public class CotacaoService {
     @Autowired
     private CotacaoMapper cotacaoMapper;
 
-    public CotacaoDTO criar(CotacaoDTO dto) {
-        Cotacao cotacao = cotacaoMapper.toEntity(dto);
-        cotacao.setDataCotacao(LocalDateTime.now());
-        return cotacaoMapper.toDto(cotacaoRepositorio.save(cotacao));
-    }
-
     public CotacaoDTO criarCotacao(CotacaoDTO cotacaoDTO) {
         Cotacao cotacao = cotacaoMapper.toEntity(cotacaoDTO);
         Cotacao novaCotacao = cotacaoRepositorio.save(cotacao);
