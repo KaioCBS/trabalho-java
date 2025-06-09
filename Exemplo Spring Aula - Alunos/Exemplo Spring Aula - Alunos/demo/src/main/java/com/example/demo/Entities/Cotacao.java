@@ -26,7 +26,7 @@ import lombok.Setter;
 
 public class Cotacao {
 
-   @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -42,8 +42,8 @@ public class Cotacao {
     private LocalDateTime dataCotacao;
     @Column(nullable = false)
     private Integer numeroDePessoas;
-     @Column(nullable = false)
-    private Double valor;
+    @Column(nullable = false)
+    private float valorTotal;
     @Column(nullable = false)
     private String status;
 

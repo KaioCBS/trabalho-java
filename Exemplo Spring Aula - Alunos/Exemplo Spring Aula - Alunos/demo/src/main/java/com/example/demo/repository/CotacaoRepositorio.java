@@ -6,4 +6,5 @@ import com.example.demo.Entities.Cotacao;
 
 @Repository
 public interface CotacaoRepositorio extends JpaRepository<Cotacao, Long> {
+
 }
