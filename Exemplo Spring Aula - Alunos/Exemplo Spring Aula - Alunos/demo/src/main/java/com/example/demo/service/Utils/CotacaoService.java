@@ -49,28 +49,18 @@ public class CotacaoService {
         
         cotacao.setStatus("ATIVO");
 
-        // *************** Verificações e Cálculo do Valor Total (Revisado) *******************
-        // A ordem das verificações é importante: primeiro se o destino foi encontrado,
-        // depois se o precoPorPessoa do destino é válido.
-        if (cotacao.getDestino() == null || cotacao.getDestino().getPrecoPorPessoa() == null) {
-            throw new IllegalArgumentException("O destino ou o preço por pessoa do destino não pode ser nulo para calcular o valor total da cotação.");
-        }
-        
-        if (cotacao.getNumeroDePessoas() == null || cotacao.getNumeroDePessoas() <= 0) {
-            throw new IllegalArgumentException("Número de pessoas deve ser um valor positivo e não pode ser nulo para calcular o valor total da cotação.");
+        if (destino.getPrecoPorPessoa() != null && cotacao.getNumeroDePessoas() != null) {
+            cotacao.setValorTotal(destino.getPrecoPorPessoa() * cotacao.getNumeroDePessoas());
+        } else {
+            throw new IllegalArgumentException("Não foi possível calcular o Valor Total. Preço por pessoa ou número de pessoas ausente.");
         }
 
-        // Garanta que o cálculo seja feito com tipos primitivos e depois convertido
-        // para o tipo wrapper Float se necessário, ou use Double por padrão.
-        // Se precoPorPessoa é Double e numeroDePessoas é Integer:
-        double preco = destino.getPrecoPorPessoa().doubleValue(); // Pega o valor primitivo double
-        int numPessoas = cotacao.getNumeroDePessoas().intValue(); // Pega o valor primitivo int
+
+        double preco = destino.getPrecoPorPessoa().doubleValue(); 
+        int numPessoas = cotacao.getNumeroDePessoas().intValue(); 
         
         // Multiplicação e atribuição explícita para Float
         cotacao.setValorTotal((Double) (preco * numPessoas)); 
-        // Ou, se a coluna for Double no DB e você quiser mais precisão:
-        // cotacao.setValorTotal(preco * numPessoas); // Se valorTotal na entidade for Double
-        // ************************************************************************************
         
         Cotacao cotacaoSalva = cotacaoRepositorio.save(cotacao);
         return cotacaoMapper.toDto(cotacaoSalva);

@@ -18,7 +18,7 @@ public class CotacaoDTO {
     private LocalDate dataRetorno;
     @NotNull(message = "Informe o número de pessoas (obrigatório)")
     private Integer numeroPessoas;
-
+    @NotNull(message = "o valor total e obrigatorio")
     private Double ValorTotal; 
 
 }

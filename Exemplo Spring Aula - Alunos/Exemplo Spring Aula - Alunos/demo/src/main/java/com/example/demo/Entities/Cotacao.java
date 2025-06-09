@@ -51,7 +51,7 @@ public class Cotacao {
     @Column(nullable = false)
     private String status;
 
-    @Column(name = "valor_total", nullable = false) // Mantenha nullable = false
+    @Column(name = "valor_total", nullable = false) 
     private Double valorTotal; 
 
 }
