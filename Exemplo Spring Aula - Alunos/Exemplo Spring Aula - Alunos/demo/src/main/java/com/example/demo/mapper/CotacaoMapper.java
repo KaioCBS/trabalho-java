@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import com.example.demo.Entities.Cotacao;
 import com.example.demo.dto.CotacaoDTO;
+
 @Mapper(componentModel = "spring", uses = {ClienteMapper.class, DestinoMapper.class})
 public interface CotacaoMapper {
     
