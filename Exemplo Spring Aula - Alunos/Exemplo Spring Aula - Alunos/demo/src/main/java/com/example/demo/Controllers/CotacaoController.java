@@ -35,7 +35,7 @@ public class CotacaoController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Para imprimir a stack trace
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Erro interno do servidor"));
         }

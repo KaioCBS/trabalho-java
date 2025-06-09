@@ -32,7 +32,7 @@ public class CotacaoService {
 
     public CotacaoDTO criar(CotacaoDTO dto) {
         Cotacao cotacao = cotacaoMapper.toEntity(dto);
-        // Verifique se o cliente e destino estão sendo buscados corretamente
+        // Verifique se os IDs estão sendo passados corretamente
         cotacao.setCliente(clienteRepositorio.findById(dto.getClienteDTO().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado")));
         cotacao.setDestino(destinoRepositorio.findById(dto.getDestinoDTO().getId())
