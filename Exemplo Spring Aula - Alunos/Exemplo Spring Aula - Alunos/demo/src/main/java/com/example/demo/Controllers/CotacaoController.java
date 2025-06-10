@@ -69,7 +69,7 @@ public class CotacaoController {
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
         Map<String, String> errors = new HashMap<>();
-        for (FieldError error || bindingResult.getFieldErrors()) {
+        for (FieldError error : bindingResult.getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
         return ResponseEntity.badRequest().body(errors);

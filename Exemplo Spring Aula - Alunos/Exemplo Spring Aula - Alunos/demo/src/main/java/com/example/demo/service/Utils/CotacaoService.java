@@ -35,17 +35,17 @@ public class CotacaoService {
     public CotacaoDTO criar(CotacaoDTO dto) {
         Cotacao cotacao = cotacaoMapper.toEntity(dto);
 
-        cotacao.setCliente(clienteRepositorio.findById(dto.getClienteDTO().getId())
+        cotacao.setCliente(clienteRepositorio.findById(dto.getClienteid())
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado.")));
         
-        Destino destino = destinoRepositorio.findById(dto.getDestinoDTO().getId())
+        Destino destino = destinoRepositorio.findById(dto.getDestino_id())
                 .orElseThrow(() -> new IllegalArgumentException("Destino não encontrado."));
         cotacao.setDestino(destino);
 
         cotacao.setDataCotacao(LocalDateTime.now());
         cotacao.setDataViagem(dto.getDataViagem());
         cotacao.setDataRetorno(dto.getDataRetorno());
-        cotacao.setNumeroDePessoas(dto.getNumeroPessoas());
+        cotacao.setNumeroDePessoas(dto.getNumeroDePessoas());
         
         cotacao.setStatus("ATIVO");
 

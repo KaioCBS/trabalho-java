@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @Data
 public class CotacaoDTO {
     @NotNull(message = "Cliente é obrigatório")
-    private ClienteDTO clienteDTO;
+    private Long clienteid;
     @NotNull(message = "Destino é obrigatório")
-    private DestinoDTO destinoDTO;
+    private Long destino_id;
     @NotNull(message = "A data da viagem é obrigatória")
     private LocalDate dataViagem;
     @NotNull(message = "A data de retorno é obrigatória")
     private LocalDate dataRetorno;
     @NotNull(message = "Informe o número de pessoas (obrigatório)")
-    private Integer numeroPessoas;
+    private Integer numeroDePessoas;
     @NotNull(message = "o valor total e obrigatorio")
     private Double ValorTotal; 
 

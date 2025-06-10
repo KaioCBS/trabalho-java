@@ -11,7 +11,7 @@ import com.example.demo.dto.CotacaoDTO;
 public interface CotacaoMapper {
     
     // Mapper gerado pelo MapStruct vai fazer a conversão automaticamente
-    @Mapping(target = "dataCotacao", ignore = true) // dataCotacao será setada no service, não no DTO
+    //@Mapping(target = "dataCotacao", ignore = true) // dataCotacao será setada no service, não no DTO
     Cotacao toEntity(CotacaoDTO cotacaoDTO);
     CotacaoDTO toDto(Cotacao cotacao);
     List<CotacaoDTO> toDTOList(List<Cotacao> cotacao);
