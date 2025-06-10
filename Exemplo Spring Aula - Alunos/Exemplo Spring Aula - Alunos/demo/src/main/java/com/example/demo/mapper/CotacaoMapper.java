@@ -13,6 +13,9 @@ public interface CotacaoMapper {
     // Mapper gerado pelo MapStruct vai fazer a conversão automaticamente
     //@Mapping(target = "dataCotacao", ignore = true) // dataCotacao será setada no service, não no DTO
     Cotacao toEntity(CotacaoDTO cotacaoDTO);
+
+    @Mapping(source = "destino.id", target = "destinoId")
+     @Mapping(source = "cliente.id", target = "clienteId")
     CotacaoDTO toDto(Cotacao cotacao);
     List<CotacaoDTO> toDTOList(List<Cotacao> cotacao);
 }

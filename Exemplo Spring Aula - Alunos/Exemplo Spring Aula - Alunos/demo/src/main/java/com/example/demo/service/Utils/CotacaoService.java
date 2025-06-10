@@ -35,10 +35,10 @@ public class CotacaoService {
     public CotacaoDTO criar(CotacaoDTO dto) {
         Cotacao cotacao = cotacaoMapper.toEntity(dto);
 
-        cotacao.setCliente(clienteRepositorio.findById(dto.getClienteid())
+        cotacao.setCliente(clienteRepositorio.findById(dto.getClienteId())
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado.")));
         
-        Destino destino = destinoRepositorio.findById(dto.getDestino_id())
+        Destino destino = destinoRepositorio.findById(dto.getDestinoId())
                 .orElseThrow(() -> new IllegalArgumentException("Destino não encontrado."));
         cotacao.setDestino(destino);
 

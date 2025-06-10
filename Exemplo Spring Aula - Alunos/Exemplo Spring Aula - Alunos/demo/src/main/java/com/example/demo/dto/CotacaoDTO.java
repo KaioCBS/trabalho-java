@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class CotacaoDTO {
     @NotNull(message = "Cliente é obrigatório")
-    private Long clienteid;
+    private Long clienteId;
     @NotNull(message = "Destino é obrigatório")
-    private Long destino_id;
+    private Long destinoId;
     @NotNull(message = "A data da viagem é obrigatória")
     private LocalDate dataViagem;
     @NotNull(message = "A data de retorno é obrigatória")
